@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Pokémon Details</title>
+</head>
+<body>
+
+    <h1>Pokémon Details</h1>
+    <table id="pokemon-details-table">
+        <thead>
+            <tr>
+                <th>Pokémon</th>
+                <th>Abilities</th>
+                <th>Base Experience</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const pokemonDetailsTableBody = document.querySelector('#pokemon-details-table tbody');
+
+            // Función para renderizar los detalles del Pokémon
+            function renderPokemonDetails(pokemonUrl) {
+                fetch(pokemonUrl)
+                    .then(response => response.json())
+                    .then(pokemonData => {
+                        const abilities = pokemonData.abilities.map(ability => ability.ability.name).join(', ');
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${pokemonData.name}</td>
+                            <td>${abilities}</td>
+                            <td>${pokemonData.base_experience}</td>
+                        `;
+                        pokemonDetailsTableBody.appendChild(row);
+                    })
+                    .catch(error => console.error('Error fetching Pokémon details:', error));
+            }
+
+            // Consultar detalles de Ditto
+            renderPokemonDetails('https://pokeapi.co/api/v2/pokemon/ditto');
+
+            // Consultar detalles de Bulbasaur
+            renderPokemonDetails('https://pokeapi.co/api/v2/pokemon/bulbasaur');
+        });
+    </script>
+
+</body>
+</html>
